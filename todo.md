@@ -7,7 +7,7 @@
 - [x] Expense List Screen with filtering and search
 - [x] Expense Detail Screen with edit/delete functionality
 - [x] Reports Screen with charts and analytics
-- [ ] Category Management Screen
+- [x] Category Management Screen
 - [x] Settings Screen with preferences
 - [x] Tab bar navigation setup
 
@@ -47,23 +47,18 @@
 - [x] Loading states and skeletons
 - [x] Haptic feedback integration
 - [x] App icon and branding
-- [ ] Performance optimization
+- [x] Performance optimization (removed redundant providers/server logic)
+- [x] Modernize Safe Area handling (`react-native-safe-area-context`)
+- [x] Implement dynamic font sizing for stats
+- [x] Fix keyboard obscuring content on form screens
+- [x] Migrate to fully local-only architecture (Removed server/tRPC)
 
-## Future Enhancements
+## Phase 4: Local Persistence & Multi-Currency (Recent)
 
-- [ ] Budget alerts and notifications
-- [ ] Recurring expenses
-- [ ] Multi-currency support
-- [ ] Biometric authentication
-
-## Recent Changes (Phase 4)
-
+- [x] AsyncStorage integration for local persistence
 - [x] Add light/dark mode toggle in Settings
 - [x] Add IDR currency to currency list
+- [x] Multi-currency support
 - [x] Test light/dark mode across all screens
 - [x] Verify IDR currency formatting
-
-## Bug Fixes
-
-- [ ] Fix navigation icon (<>) displaying incorrectly on top screens
-- [ ] Fix missing text on Clear All Data button
+- [x] Fix redundant bottom padding in tab screens
