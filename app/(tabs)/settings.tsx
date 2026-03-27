@@ -70,19 +70,38 @@ export default function SettingsScreen() {
       }
 
       Alert.alert(
-        "Confirm Import",
-        "This will overwrite your current data with the backup. Are you sure?",
+        "Import Data",
+        "Choose how you want to import your data:",
         [
-          { text: "Cancel", style: "cancel", onPress: () => setLoading(false) },
+          { 
+            text: "Cancel", 
+            style: "cancel", 
+            onPress: () => setLoading(false) 
+          },
           {
-            text: "Import",
+            text: "Overwrite",
+            style: "destructive",
             onPress: async () => {
               try {
-                await storage.importData(data);
+                await storage.importData(data, false);
                 await refreshData();
-                Alert.alert("Success", "Data imported successfully");
+                Alert.alert("Success", "Data overwritten successfully");
               } catch (error) {
                 Alert.alert("Error", "Failed to import data");
+              } finally {
+                setLoading(false);
+              }
+            }
+          },
+          {
+            text: "Merge",
+            onPress: async () => {
+              try {
+                await storage.importData(data, true);
+                await refreshData();
+                Alert.alert("Success", "Data merged successfully");
+              } catch (error) {
+                Alert.alert("Error", "Failed to merge data");
               } finally {
                 setLoading(false);
               }

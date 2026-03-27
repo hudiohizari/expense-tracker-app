@@ -222,16 +222,33 @@ export async function exportData() {
   }
 }
 
-export async function importData(data: any): Promise<void> {
+export async function importData(data: any, merge: boolean = false): Promise<void> {
   try {
-    if (data.expenses) {
-      await AsyncStorage.setItem(EXPENSES_KEY, JSON.stringify(data.expenses));
-    }
-    if (data.categories) {
-      await AsyncStorage.setItem(CATEGORIES_KEY, JSON.stringify(data.categories));
-    }
-    if (data.settings) {
-      await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
+    if (merge) {
+      if (data.expenses) {
+        const currentExpenses = await getExpenses();
+        const existingIds = new Set(currentExpenses.map(e => e.id));
+        const newExpenses = data.expenses.filter((e: Expense) => !existingIds.has(e.id));
+        await AsyncStorage.setItem(EXPENSES_KEY, JSON.stringify([...currentExpenses, ...newExpenses]));
+      }
+      
+      if (data.categories) {
+        const currentCategories = await getCategories();
+        const existingIds = new Set(currentCategories.map(c => c.id));
+        const newCategories = data.categories.filter((c: Category) => !existingIds.has(c.id));
+        await AsyncStorage.setItem(CATEGORIES_KEY, JSON.stringify([...currentCategories, ...newCategories]));
+      }
+      // Settings are typically not merged; we keep current settings during a merge
+    } else {
+      if (data.expenses) {
+        await AsyncStorage.setItem(EXPENSES_KEY, JSON.stringify(data.expenses));
+      }
+      if (data.categories) {
+        await AsyncStorage.setItem(CATEGORIES_KEY, JSON.stringify(data.categories));
+      }
+      if (data.settings) {
+        await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
+      }
     }
   } catch (error) {
     console.error('Failed to import data:', error);
