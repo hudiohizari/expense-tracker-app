@@ -115,12 +115,12 @@ export default function HomeScreen() {
                   >
                     <View className="flex-row items-center flex-1">
                       <View
-                        className="w-12 h-12 rounded-full items-center justify-center mr-3"
+                        className="w-12 h-12 rounded-full items-center justify-center mr-4"
                         style={{ backgroundColor: category?.color || themeColors.surface }}
                       >
                         <Text className="text-xl">{category?.icon}</Text>
                       </View>
-                      <View className="flex-1">
+                      <View className="flex-1 ml-1">
                         <Text className="text-base font-medium text-foreground">{category?.name}</Text>
                         <Text className="text-xs text-muted">{formatDate(item.date, settings.dateFormat)}</Text>
                       </View>

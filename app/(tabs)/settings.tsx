@@ -1,5 +1,6 @@
 import { ScrollView, Text, View, TouchableOpacity, Alert, Switch } from "react-native";
 import { useState } from "react";
+import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useExpense } from "@/lib/expense-context";
 import { useColors } from "@/hooks/use-colors";
@@ -9,6 +10,7 @@ import * as storage from "@/lib/storage";
 import { useThemeContext } from "@/lib/theme-provider";
 
 export default function SettingsScreen() {
+  const router = useRouter();
   const themeColors = useColors();
   const { settings, updateSettings, refreshData } = useExpense();
   const [loading, setLoading] = useState(false);
@@ -101,6 +103,18 @@ export default function SettingsScreen() {
               thumbColor={isDarkMode ? themeColors.background : themeColors.foreground}
             />
           </View>
+
+          {/* Manage Categories */}
+          <TouchableOpacity
+            onPress={() => router.push("/categories")}
+            className="bg-surface rounded-2xl p-4 mb-4 border border-border flex-row items-center justify-between"
+          >
+            <View className="flex-row items-center">
+              <IconSymbol name="tag.fill" size={20} color={themeColors.primary} />
+              <Text className="text-base font-medium text-foreground ml-3">Manage Categories</Text>
+            </View>
+            <IconSymbol name="chevron.right" size={20} color={themeColors.muted} />
+          </TouchableOpacity>
 
           {/* Currency Selection */}
           <View className="bg-surface rounded-2xl p-4 mb-4 border border-border">

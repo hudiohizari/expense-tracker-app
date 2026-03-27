@@ -76,32 +76,32 @@ export default function AddExpenseScreen() {
           {/* Category Selection */}
           <View>
             <Text className="text-sm font-semibold text-foreground mb-2">Category</Text>
-            <View className="gap-2">
+            <View>
               {categories.map(category => (
                 <TouchableOpacity
                   key={category.id}
                   onPress={() => setSelectedCategory(category.id)}
-                  className={`flex-row items-center p-4 rounded-2xl border ${
+                  className={`flex-row items-center p-4 rounded-2xl border mb-3 ${
                     selectedCategory === category.id
                       ? "bg-primary border-primary"
                       : "bg-surface border-border"
                   }`}
                 >
                   <View
-                    className="w-10 h-10 rounded-full items-center justify-center mr-3"
+                    className="w-10 h-10 rounded-full items-center justify-center mr-4"
                     style={{ backgroundColor: category.color }}
                   >
                     <Text className="text-lg">{category.icon}</Text>
                   </View>
                   <Text
-                    className={`flex-1 font-medium ${
+                    className={`flex-1 font-medium ml-1 ${
                       selectedCategory === category.id ? "text-background" : "text-foreground"
                     }`}
                   >
                     {category.name}
                   </Text>
                   {selectedCategory === category.id && (
-                    <IconSymbol name="chevron.right" size={20} color={themeColors.background} />
+                    <IconSymbol name="checkmark" size={20} color={themeColors.background} />
                   )}
                 </TouchableOpacity>
               ))}
