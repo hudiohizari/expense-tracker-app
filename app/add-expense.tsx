@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScreenContainer } from "@/components/screen-container";
 import { useExpense } from "@/lib/expense-context";
-import { getTodayDate, getCurrencySymbol, formatInputAmount } from "@/lib/expense-utils";
+import { getTodayDate, getCurrencySymbol, formatInputAmount, parseInputAmount, getAmountPlaceholder } from "@/lib/expense-utils";
 import { useColors } from "@/hooks/use-colors";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 
@@ -38,7 +38,7 @@ export default function AddExpenseScreen() {
     try {
       setLoading(true);
       await addExpense({
-        amount: parseFloat(amount.replace(/,/g, "")),
+        amount: parseInputAmount(amount),
         category: selectedCategory,
         date,
         notes: notes.trim() || undefined,
@@ -88,7 +88,7 @@ export default function AddExpenseScreen() {
               </Text>
               <TextInput
                 className="flex-1 text-4xl font-bold text-foreground h-full p-0"
-                placeholder="0.00"
+                placeholder={getAmountPlaceholder()}
                 placeholderTextColor={themeColors.muted}
                 keyboardType="decimal-pad"
                 value={amount}

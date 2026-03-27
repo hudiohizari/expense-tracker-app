@@ -1,14 +1,49 @@
-/**
- * Expense Utilities - Helper functions for calculations and formatting
- */
-
+import * as Localization from 'expo-localization';
 import { Expense, Category } from './types';
+
+/**
+ * Get formatting locale
+ */
+export function getLocale(): string {
+  const locales = Localization.getLocales();
+  if (locales && locales.length > 0 && locales[0].languageTag) {
+    return locales[0].languageTag;
+  }
+  return new Intl.NumberFormat().resolvedOptions().locale || 'en-US';
+}
+
+/**
+ * Get the system's decimal and grouping separators
+ */
+export function getLocaleSeparators() {
+  const locale = getLocale();
+  
+  // Detection using simple toLocaleString which is widely supported
+  const decimalTest = (1.1).toLocaleString(locale);
+  const groupingTest = (1000000).toLocaleString(locale);
+  
+  // Extract characters. e.g. "1.1" -> "." or "1,1" -> ","
+  const decimal = decimalTest.length >= 3 ? decimalTest.charAt(1) : '.';
+  
+  let grouping = ',';
+  if (groupingTest.includes('.')) grouping = '.';
+  else if (groupingTest.includes(',')) grouping = ',';
+  else if (groupingTest.includes(' ')) grouping = ' ';
+  else if (groupingTest.includes('\u00A0')) grouping = ' '; // Non-breaking space
+  
+  return { decimal, grouping };
+}
+
+export function getAmountPlaceholder(): string {
+  const { decimal } = getLocaleSeparators();
+  return `0${decimal}00`;
+}
 
 /**
  * Format currency amount
  */
 export function formatCurrency(amount: number, currency: string = 'USD'): string {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat(getLocale(), {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,
@@ -34,25 +69,48 @@ export function getCurrencySymbol(currency: string = 'USD'): string {
  * Format a number/string for display in an input field (thousands separator)
  */
 export function formatInputAmount(value: string | number): string {
-  if (value === undefined || value === null) return "";
+  if (value === undefined || value === null || value === "") return "";
   
-  // Remove existing commas if any
-  let numeric = value.toString().replace(/,/g, "").replace(/[^0-9.]/g, "");
-
-  const parts = numeric.split(".");
-  if (parts.length > 2) return numeric; // Invalid input, return as is
+  const { decimal, grouping } = getLocaleSeparators();
+  const locale = getLocale();
+  
+  // Normalize input: Remove grouping separators and convert decimal to dot for internal processing
+  let normalized = value.toString()
+    .split(grouping).join("")
+    .replace(decimal, ".");
+  
+  // Keep only numbers and a single dot
+  normalized = normalized.replace(/[^0-9.]/g, "");
+  const parts = normalized.split(".");
+  if (parts.length > 2) return value.toString();
 
   let integerPart = parts[0];
-  let decimalPart = parts[1] !== undefined ? "." + parts[1].slice(0, 2) : "";
+  let decimalPart = parts[1] !== undefined ? decimal + parts[1].slice(0, 2) : "";
 
   if (integerPart) {
-    // Add thousand separators
-    integerPart = Number(integerPart).toLocaleString('en-US');
-  } else if (numeric.startsWith('.')) {
+    // Add thousand separators using locale formatting
+    integerPart = Number(integerPart).toLocaleString(locale, {
+      maximumFractionDigits: 0
+    });
+  } else if (normalized.startsWith('.')) {
     integerPart = "0";
   }
 
   return integerPart + decimalPart;
+}
+
+/**
+ * Parse a formatted input string back to a number
+ */
+export function parseInputAmount(value: string): number {
+  if (!value) return 0;
+  const { decimal, grouping } = getLocaleSeparators();
+  
+  const cleanValue = value
+    .split(grouping).join("")
+    .replace(decimal, ".");
+    
+  return parseFloat(cleanValue) || 0;
 }
 
 /**
