@@ -1,7 +1,5 @@
 import { View, type ViewProps, KeyboardAvoidingView, Platform } from "react-native";
-
-import { SafeAreaView, type Edge } from "react-native-safe-area-context";
-
+import { useSafeAreaInsets, type Edge } from "react-native-safe-area-context";
 import { cn } from "@/lib/utils";
 
 export interface ScreenContainerProps extends ViewProps {
@@ -19,7 +17,7 @@ export interface ScreenContainerProps extends ViewProps {
    */
   containerClassName?: string;
   /**
-   * Additional className for the SafeAreaView (content layer).
+   * Additional className for the inner container (content layer).
    */
   safeAreaClassName?: string;
   /**
@@ -32,16 +30,7 @@ export interface ScreenContainerProps extends ViewProps {
  * A container component that properly handles SafeArea and background colors.
  *
  * The outer View extends to full screen (including status bar area) with the background color,
- * while the inner SafeAreaView ensures content is within safe bounds.
- *
- * Usage:
- * ```tsx
- * <ScreenContainer className="p-4">
- *   <Text className="text-2xl font-bold text-foreground">
- *     Welcome
- *   </Text>
- * </ScreenContainer>
- * ```
+ * while the inner View ensures content is within safe bounds using useSafeAreaInsets.
  */
 export function ScreenContainer({
   children,
@@ -53,19 +42,23 @@ export function ScreenContainer({
   style,
   ...props
 }: ScreenContainerProps) {
+  const insets = useSafeAreaInsets();
+
+  const safeAreaStyle = {
+    paddingTop: edges.includes("top") ? insets.top : 0,
+    paddingBottom: edges.includes("bottom") ? insets.bottom : 0,
+    paddingLeft: edges.includes("left") ? insets.left : 0,
+    paddingRight: edges.includes("right") ? insets.right : 0,
+  };
+
   return (
     <View
-      className={cn(
-        "flex-1",
-        "bg-background",
-        containerClassName
-      )}
+      className={cn("flex-1", "bg-background", containerClassName)}
       {...props}
     >
-      <SafeAreaView
-        edges={edges}
+      <View
         className={cn("flex-1", safeAreaClassName)}
-        style={style}
+        style={[safeAreaStyle, style]}
       >
         {keyboardAvoiding ? (
           <KeyboardAvoidingView
@@ -77,7 +70,7 @@ export function ScreenContainer({
         ) : (
           <View className={cn("flex-1", className)}>{children}</View>
         )}
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

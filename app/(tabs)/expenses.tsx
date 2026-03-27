@@ -41,7 +41,7 @@ export default function ExpensesScreen() {
   };
 
   return (
-    <ScreenContainer className="p-0" edges={["left", "right"]}>
+    <ScreenContainer className="p-0" edges={["left", "right"]} keyboardAvoiding={true}>
       {/* Sticky Header */}
       <View 
         style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 8 : 16) }}
@@ -68,17 +68,19 @@ export default function ExpensesScreen() {
       >
 
         {/* Category Filter */}
-        <View className="px-6 pt-4 pb-2">
+        <View className="pt-4 pb-2">
           <FlatList
             horizontal
             data={categories}
             keyExtractor={item => item.id}
             scrollEnabled={true}
             showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 24 }}
+            ItemSeparatorComponent={() => <View style={{ width: 8 }} />}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => setSelectedCategory(selectedCategory === item.id ? null : item.id)}
-                className={`mr-2 px-4 py-2 rounded-full ${
+                className={`px-4 py-2 rounded-full ${
                   selectedCategory === item.id ? "bg-primary" : "bg-surface border border-border"
                 }`}
               >
