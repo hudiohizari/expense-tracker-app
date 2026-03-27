@@ -54,7 +54,6 @@
 - [ ] Budget alerts and notifications
 - [ ] Recurring expenses
 - [ ] Multi-currency support
-- [ ] Cloud sync (requires backend)
 - [ ] Biometric authentication
 
 ## Recent Changes (Phase 4)
