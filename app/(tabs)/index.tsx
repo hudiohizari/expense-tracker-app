@@ -57,35 +57,35 @@ export default function HomeScreen() {
         <View className="bg-primary px-6 pt-6 pb-8">
           <View className="flex-row items-center justify-between mb-6">
             <TouchableOpacity onPress={handlePrevMonth} className="p-2">
-              <Text className="text-2xl text-background">‹</Text>
+              <Text className="text-2xl text-white">‹</Text>
             </TouchableOpacity>
-            <Text className="text-2xl font-bold text-background">
+            <Text className="text-2xl font-bold text-white">
               {getMonthName(currentMonth)} {currentYear}
             </Text>
             <TouchableOpacity onPress={handleNextMonth} className="p-2">
-              <Text className="text-2xl text-background">›</Text>
+              <Text className="text-2xl text-white">›</Text>
             </TouchableOpacity>
           </View>
 
           {/* Summary Cards */}
           <View className="gap-3">
-            <View className="bg-white bg-opacity-20 rounded-2xl p-4">
-              <Text className="text-sm text-background text-opacity-80 mb-1">Total Spent</Text>
-              <Text className="text-3xl font-bold text-background">
+            <View className="bg-white/20 rounded-2xl p-4">
+              <Text className="text-sm text-white mb-1">Total Spent</Text>
+              <Text className="text-3xl font-bold text-white">
                 {formatCurrency(totalSpent, settings.currency)}
               </Text>
             </View>
 
             <View className="flex-row gap-3">
-              <View className="flex-1 bg-white bg-opacity-20 rounded-2xl p-4">
-                <Text className="text-xs text-background text-opacity-80 mb-1">Avg Daily</Text>
-                <Text className="text-xl font-bold text-background">
+              <View className="flex-1 bg-white/20 rounded-2xl p-4">
+                <Text className="text-xs text-white mb-1">Avg Daily</Text>
+                <Text className="text-xl font-bold text-white">
                   {formatCurrency(avgDaily, settings.currency)}
                 </Text>
               </View>
-              <View className="flex-1 bg-white bg-opacity-20 rounded-2xl p-4">
-                <Text className="text-xs text-background text-opacity-80 mb-1">Transactions</Text>
-                <Text className="text-xl font-bold text-background">{monthExpenses.length}</Text>
+              <View className="flex-1 bg-white/20 rounded-2xl p-4">
+                <Text className="text-xs text-white mb-1">Transactions</Text>
+                <Text className="text-xl font-bold text-white">{monthExpenses.length}</Text>
               </View>
             </View>
           </View>
@@ -146,8 +146,8 @@ export default function HomeScreen() {
             className="bg-primary rounded-2xl py-4 items-center justify-center"
           >
             <View className="flex-row items-center gap-2">
-              <IconSymbol name="plus.circle.fill" size={24} color={themeColors.background} />
-              <Text className="text-lg font-semibold text-background">Add Expense</Text>
+              <IconSymbol name="plus.circle.fill" size={24} color="#ffffff" />
+              <Text className="text-lg font-semibold text-white">Add Expense</Text>
             </View>
           </TouchableOpacity>
         </View>

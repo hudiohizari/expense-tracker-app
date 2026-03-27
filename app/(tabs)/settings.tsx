@@ -81,7 +81,7 @@ export default function SettingsScreen() {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
         {/* Header */}
         <View className="bg-primary px-6 pt-6 pb-6">
-          <Text className="text-2xl font-bold text-background">Settings</Text>
+          <Text className="text-2xl font-bold text-white">Settings</Text>
         </View>
 
         {/* Preferences Section */}
@@ -116,16 +116,16 @@ export default function SettingsScreen() {
                 >
                   <View
                     className={`w-5 h-5 rounded-full border-2 items-center justify-center mr-3 ${
-                      settings.currency === currency ? "border-background" : "border-border"
+                      settings.currency === currency ? "border-white" : "border-border"
                     }`}
                   >
                     {settings.currency === currency && (
-                      <View className="w-2.5 h-2.5 rounded-full bg-background" />
+                      <View className="w-2.5 h-2.5 rounded-full bg-white" />
                     )}
                   </View>
                   <Text
                     className={`font-medium ${
-                      settings.currency === currency ? "text-background" : "text-foreground"
+                      settings.currency === currency ? "text-white" : "text-foreground"
                     }`}
                   >
                     {currency}
@@ -149,16 +149,16 @@ export default function SettingsScreen() {
                 >
                   <View
                     className={`w-5 h-5 rounded-full border-2 items-center justify-center mr-3 ${
-                      settings.dateFormat === format ? "border-background" : "border-border"
+                      settings.dateFormat === format ? "border-white" : "border-border"
                     }`}
                   >
                     {settings.dateFormat === format && (
-                      <View className="w-2.5 h-2.5 rounded-full bg-background" />
+                      <View className="w-2.5 h-2.5 rounded-full bg-white" />
                     )}
                   </View>
                   <Text
                     className={`font-medium ${
-                      settings.dateFormat === format ? "text-background" : "text-foreground"
+                      settings.dateFormat === format ? "text-white" : "text-foreground"
                     }`}
                   >
                     {format}
@@ -188,7 +188,7 @@ export default function SettingsScreen() {
           <TouchableOpacity
             onPress={handleClearData}
             disabled={loading}
-            className="flex-row items-center justify-between bg-error bg-opacity-10 rounded-2xl p-4 border border-error border-opacity-30"
+            className="flex-row items-center justify-between bg-error/10 rounded-2xl p-4 border border-border"
           >
             <View className="flex-row items-center">
               <IconSymbol name="trash" size={20} color={themeColors.error} />

@@ -41,17 +41,17 @@ export default function ExpensesScreen() {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
         {/* Header */}
         <View className="bg-primary px-6 pt-6 pb-6">
-          <Text className="text-2xl font-bold text-background mb-4">Expenses</Text>
+          <Text className="text-2xl font-bold text-white mb-4">Expenses</Text>
 
           {/* Search Bar */}
-          <View className="bg-white bg-opacity-20 rounded-full px-4 py-3 flex-row items-center">
-            <IconSymbol name="magnifyingglass" size={20} color={themeColors.background} />
+          <View className="bg-white/20 rounded-full px-4 py-3 flex-row items-center">
+            <IconSymbol name="magnifyingglass" size={20} color="#ffffff" />
             <TextInput
               placeholder="Search expenses..."
-              placeholderTextColor={`${themeColors.background}80`}
+              placeholderTextColor="rgba(255, 255, 255, 0.7)"
               value={searchText}
               onChangeText={setSearchText}
-              className="flex-1 ml-2 text-background"
+              className="flex-1 ml-2 text-white"
             />
           </View>
         </View>
@@ -71,7 +71,7 @@ export default function ExpensesScreen() {
                   selectedCategory === item.id ? "bg-primary" : "bg-surface border border-border"
                 }`}
               >
-                <Text className={selectedCategory === item.id ? "text-background font-medium" : "text-foreground font-medium"}>
+                <Text className={selectedCategory === item.id ? "text-white font-medium" : "text-foreground font-medium"}>
                   {item.icon} {item.name}
                 </Text>
               </TouchableOpacity>
@@ -130,8 +130,8 @@ export default function ExpensesScreen() {
             className="bg-primary rounded-2xl py-4 items-center justify-center"
           >
             <View className="flex-row items-center gap-2">
-              <IconSymbol name="plus.circle.fill" size={24} color={themeColors.background} />
-              <Text className="text-lg font-semibold text-background">Add Expense</Text>
+              <IconSymbol name="plus.circle.fill" size={24} color="#ffffff" />
+              <Text className="text-lg font-semibold text-white">Add Expense</Text>
             </View>
           </TouchableOpacity>
         </View>
