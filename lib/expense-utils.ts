@@ -250,7 +250,13 @@ export function sortByDateDesc(expenses: Expense[]): Expense[] {
   return [...expenses].sort((a, b) => {
     const dateA = new Date(a.date).getTime();
     const dateB = new Date(b.date).getTime();
-    return dateB - dateA;
+    
+    if (dateB !== dateA) {
+      return dateB - dateA;
+    }
+    
+    // Fallback to createdAt for same-day expenses
+    return (b.createdAt || 0) - (a.createdAt || 0);
   });
 }
 

@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { useState, useMemo } from "react";
 import { ScreenContainer } from "@/components/screen-container";
 import { useExpense } from "@/lib/expense-context";
-import { formatCurrency, formatDate, calculateTotal, getAverageDailySpending, getMonthRange, getMonthName } from "@/lib/expense-utils";
+import { formatCurrency, formatDate, calculateTotal, getAverageDailySpending, getMonthRange, getMonthName, sortByDateDesc } from "@/lib/expense-utils";
 import { useColors } from "@/hooks/use-colors";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { FloatingActionButton } from "@/components/floating-action-button";
@@ -32,7 +32,7 @@ export default function HomeScreen() {
   const totalSpent = useMemo(() => calculateTotal(monthExpenses), [monthExpenses]);
   const avgDaily = useMemo(() => getAverageDailySpending(monthExpenses), [monthExpenses]);
   const recentExpenses = useMemo(() => {
-    return [...monthExpenses].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+    return sortByDateDesc(monthExpenses).slice(0, 5);
   }, [monthExpenses]);
 
   const getCategoryInfo = (categoryId: string) => {
