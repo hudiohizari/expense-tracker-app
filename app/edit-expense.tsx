@@ -1,8 +1,10 @@
-import { ScrollView, Text, View, TouchableOpacity, TextInput, Alert } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity, TextInput, Alert, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import { ScreenContainer } from "@/components/screen-container";
 import { useExpense } from "@/lib/expense-context";
+import { formatCurrency, getCurrencySymbol, formatInputAmount } from "@/lib/expense-utils";
 import { useColors } from "@/hooks/use-colors";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 
@@ -10,7 +12,12 @@ export default function EditExpenseScreen() {
   const router = useRouter();
   const { expenseId } = useLocalSearchParams();
   const themeColors = useColors();
-  const { expenses, updateExpense, deleteExpense, categories } = useExpense();
+  const insets = useSafeAreaInsets();
+  const { expenses, updateExpense, deleteExpense, categories, settings } = useExpense();
+
+  const handleAmountChange = (text: string) => {
+    setAmount(formatInputAmount(text));
+  };
 
   const [amount, setAmount] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -22,7 +29,7 @@ export default function EditExpenseScreen() {
 
   useEffect(() => {
     if (expense) {
-      setAmount(expense.amount.toString());
+      setAmount(formatInputAmount(expense.amount));
       setSelectedCategory(expense.category);
       setDate(expense.date);
       setNotes(expense.notes || "");
@@ -38,7 +45,7 @@ export default function EditExpenseScreen() {
     try {
       setLoading(true);
       await updateExpense(expense!.id, {
-        amount: parseFloat(amount),
+        amount: parseFloat(amount.replace(/,/g, "")),
         category: selectedCategory,
         date,
         notes: notes.trim() || undefined,
@@ -78,9 +85,12 @@ export default function EditExpenseScreen() {
   }
 
   return (
-    <ScreenContainer className="p-0">
+    <ScreenContainer className="p-0" edges={["left", "right", "bottom"]}>
       {/* Header */}
-      <View className="bg-background px-6 pt-6 pb-6 border-b border-border shadow-sm">
+      <View 
+        style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 8 : 16) }} 
+        className="bg-background px-6 pb-6 border-b border-border shadow-sm"
+      >
         <View className="flex-row items-center justify-between h-8">
           <TouchableOpacity 
             onPress={() => router.back()} 
@@ -104,16 +114,20 @@ export default function EditExpenseScreen() {
 
           {/* Amount Input */}
           <View>
-            <Text className="text-sm font-semibold text-foreground mb-2">Amount</Text>
-            <View className="flex-row items-center bg-surface rounded-2xl px-4 py-3 border border-border">
-              <Text className="text-lg font-semibold text-muted mr-2">$</Text>
+            <Text className="text-sm font-semibold text-muted mb-3 uppercase tracking-wider">Amount</Text>
+            <View className="bg-surface rounded-3xl px-5 py-3 border border-border flex-row items-center h-20 shadow-sm">
+              <Text className="text-3xl font-bold text-muted mr-3 leading-none p-0">
+                {getCurrencySymbol(settings.currency)}
+              </Text>
               <TextInput
+                className="flex-1 text-4xl font-bold text-foreground h-full p-0"
                 placeholder="0.00"
                 placeholderTextColor={themeColors.muted}
-                value={amount}
-                onChangeText={setAmount}
                 keyboardType="decimal-pad"
-                className="flex-1 text-lg text-foreground"
+                value={amount}
+                onChangeText={handleAmountChange}
+                textAlignVertical="center"
+                style={{ paddingVertical: 0 }}
               />
             </View>
           </View>
@@ -185,7 +199,7 @@ export default function EditExpenseScreen() {
       </ScrollView>
 
       {/* Action Buttons */}
-      <View className="gap-3 mt-6">
+      <View className="px-6 gap-3 mt-6 mb-8">
         <TouchableOpacity
           onPress={handleUpdateExpense}
           disabled={loading}

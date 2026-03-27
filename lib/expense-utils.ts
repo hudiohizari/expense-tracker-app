@@ -17,6 +17,45 @@ export function formatCurrency(amount: number, currency: string = 'USD'): string
 }
 
 /**
+ * Get currency symbol from code
+ */
+export function getCurrencySymbol(currency: string = 'USD'): string {
+  const symbols: Record<string, string> = {
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    JPY: '¥',
+    IDR: 'Rp',
+  };
+  return symbols[currency] || currency;
+}
+
+/**
+ * Format a number/string for display in an input field (thousands separator)
+ */
+export function formatInputAmount(value: string | number): string {
+  if (value === undefined || value === null) return "";
+  
+  // Remove existing commas if any
+  let numeric = value.toString().replace(/,/g, "").replace(/[^0-9.]/g, "");
+
+  const parts = numeric.split(".");
+  if (parts.length > 2) return numeric; // Invalid input, return as is
+
+  let integerPart = parts[0];
+  let decimalPart = parts[1] !== undefined ? "." + parts[1].slice(0, 2) : "";
+
+  if (integerPart) {
+    // Add thousand separators
+    integerPart = Number(integerPart).toLocaleString('en-US');
+  } else if (numeric.startsWith('.')) {
+    integerPart = "0";
+  }
+
+  return integerPart + decimalPart;
+}
+
+/**
  * Format date to readable string
  */
 export function formatDate(dateString: string, format: string = 'MM/DD/YYYY'): string {
