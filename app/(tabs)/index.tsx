@@ -8,6 +8,7 @@ import { useExpense } from "@/lib/expense-context";
 import { formatCurrency, formatDate, calculateTotal, getAverageDailySpending, getMonthRange, getMonthName } from "@/lib/expense-utils";
 import { useColors } from "@/hooks/use-colors";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { FloatingActionButton } from "@/components/floating-action-button";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -81,7 +82,10 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
+      <ScrollView 
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }} 
+        className="flex-1"
+      >
         {/* Scrollable Summary Cards */}
         <View className="px-6 pt-4 pb-2">
           <View className="gap-3">
@@ -169,19 +173,9 @@ export default function HomeScreen() {
           )}
         </View>
 
-        {/* Add Expense Button */}
-        <View className="px-6 pb-6">
-          <TouchableOpacity
-            onPress={() => router.push("/add-expense")}
-            className="bg-primary rounded-2xl py-4 items-center justify-center"
-          >
-            <View className="flex-row items-center gap-2">
-              <IconSymbol name="plus.circle.fill" size={24} color="#ffffff" />
-              <Text className="text-lg font-semibold text-white">Add Expense</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        {/* FAB is outside ScrollView */}
       </ScrollView>
+      <FloatingActionButton />
     </ScreenContainer>
   );
 }

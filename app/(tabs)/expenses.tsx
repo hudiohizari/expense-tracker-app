@@ -8,6 +8,7 @@ import { useExpense } from "@/lib/expense-context";
 import { formatCurrency, formatDate, sortByDateDesc } from "@/lib/expense-utils";
 import { useColors } from "@/hooks/use-colors";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { FloatingActionButton } from "@/components/floating-action-button";
 
 export default function ExpensesScreen() {
   const router = useRouter();
@@ -41,26 +42,30 @@ export default function ExpensesScreen() {
 
   return (
     <ScreenContainer className="p-0" edges={["left", "right"]}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
-        {/* Header */}
-        <View 
-          style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 8 : 16) }}
-          className="bg-primary px-6 pb-6"
-        >
-          <Text className="text-2xl font-bold text-white mb-4">Expenses</Text>
+      {/* Sticky Header */}
+      <View 
+        style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 8 : 16) }}
+        className="bg-primary px-6 pb-6 shadow-sm z-10"
+      >
+        <Text className="text-2xl font-bold text-white mb-4">Expenses</Text>
 
-          {/* Search Bar */}
-          <View className="bg-white/20 rounded-full px-4 py-3 flex-row items-center">
-            <IconSymbol name="magnifyingglass" size={20} color="#ffffff" />
-            <TextInput
-              placeholder="Search expenses..."
-              placeholderTextColor="rgba(255, 255, 255, 0.7)"
-              value={searchText}
-              onChangeText={setSearchText}
-              className="flex-1 ml-2 text-white"
-            />
-          </View>
+        {/* Search Bar */}
+        <View className="bg-white/20 rounded-full px-4 py-3 flex-row items-center">
+          <IconSymbol name="magnifyingglass" size={20} color="#ffffff" />
+          <TextInput
+            placeholder="Search expenses..."
+            placeholderTextColor="rgba(255, 255, 255, 0.7)"
+            value={searchText}
+            onChangeText={setSearchText}
+            className="flex-1 ml-2 text-white"
+          />
         </View>
+      </View>
+
+      <ScrollView 
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }} 
+        className="flex-1"
+      >
 
         {/* Category Filter */}
         <View className="px-6 pt-4 pb-2">
@@ -129,19 +134,9 @@ export default function ExpensesScreen() {
           )}
         </View>
 
-        {/* Add Button */}
-        <View className="px-6 pb-6">
-          <TouchableOpacity
-            onPress={() => router.push("/add-expense")}
-            className="bg-primary rounded-2xl py-4 items-center justify-center"
-          >
-            <View className="flex-row items-center gap-2">
-              <IconSymbol name="plus.circle.fill" size={24} color="#ffffff" />
-              <Text className="text-lg font-semibold text-white">Add Expense</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        {/* FAB is outside ScrollView */}
       </ScrollView>
+      <FloatingActionButton />
     </ScreenContainer>
   );
 }
