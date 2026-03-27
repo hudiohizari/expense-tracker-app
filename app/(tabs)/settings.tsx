@@ -10,6 +10,9 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import * as storage from "@/lib/storage";
 import { useThemeContext } from "@/lib/theme-provider";
+import * as FileSystem from 'expo-file-system/legacy';
+import * as Sharing from 'expo-sharing';
+import * as DocumentPicker from 'expo-document-picker';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -17,24 +20,79 @@ export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const { settings, updateSettings, refreshData } = useExpense();
   const [loading, setLoading] = useState(false);
-
-  const handleExportData = async () => {
+ 
+   const handleExportData = async () => {
     try {
       setLoading(true);
       const data = await storage.exportData();
       const jsonString = JSON.stringify(data, null, 2);
-
-      Alert.alert(
-        "Export Successful",
-        "Your data has been prepared. You can now share or save it.",
-        [{ text: "OK" }]
-      );
-
-      // In a real app, you would use Share API or save to file
-      console.log("Exported data:", jsonString);
+      
+      const fileName = `expense_tracker_export_${new Date().toISOString().split('T')[0]}.json`;
+      const filePath = `${FileSystem.documentDirectory}${fileName}`;
+      
+      await FileSystem.writeAsStringAsync(filePath, jsonString);
+      
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(filePath, {
+          mimeType: 'application/json',
+          dialogTitle: 'Export Expense Data',
+          UTI: 'public.json'
+        });
+      } else {
+        Alert.alert("Export Successful", "Data exported to console (sharing not available)");
+        console.log("Exported data:", jsonString);
+      }
     } catch (error) {
+      console.error("Export error:", error);
       Alert.alert("Error", "Failed to export data");
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImportData = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'application/json',
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) return;
+
+      setLoading(true);
+      const fileUri = result.assets[0].uri;
+      const fileContent = await FileSystem.readAsStringAsync(fileUri);
+      const data = JSON.parse(fileContent);
+
+      // Basic validation
+      if (!data.expenses && !data.categories && !data.settings) {
+        throw new Error("Invalid backup file format");
+      }
+
+      Alert.alert(
+        "Confirm Import",
+        "This will overwrite your current data with the backup. Are you sure?",
+        [
+          { text: "Cancel", style: "cancel", onPress: () => setLoading(false) },
+          {
+            text: "Import",
+            onPress: async () => {
+              try {
+                await storage.importData(data);
+                await refreshData();
+                Alert.alert("Success", "Data imported successfully");
+              } catch (error) {
+                Alert.alert("Error", "Failed to import data");
+              } finally {
+                setLoading(false);
+              }
+            }
+          }
+        ]
+      );
+    } catch (error) {
+      console.error("Import error:", error);
+      Alert.alert("Error", "Failed to import data. Please ensure the file is a valid JSON backup.");
       setLoading(false);
     }
   };
@@ -202,6 +260,18 @@ export default function SettingsScreen() {
             <View className="flex-row items-center">
               <IconSymbol name="paperplane.fill" size={20} color={themeColors.primary} />
               <Text className="text-base font-medium text-foreground ml-3">Export Data</Text>
+            </View>
+            <IconSymbol name="chevron.right" size={20} color={themeColors.muted} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleImportData}
+            disabled={loading}
+            className="flex-row items-center justify-between bg-surface rounded-2xl p-4 mb-3 border border-border"
+          >
+            <View className="flex-row items-center">
+              <IconSymbol name="square.and.arrow.down.fill" size={20} color={themeColors.primary} />
+              <Text className="text-base font-medium text-foreground ml-3">Import Data</Text>
             </View>
             <IconSymbol name="chevron.right" size={20} color={themeColors.muted} />
           </TouchableOpacity>
