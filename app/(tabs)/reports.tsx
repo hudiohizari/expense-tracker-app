@@ -89,7 +89,11 @@ export default function ReportsScreen() {
           <View className="gap-3">
             <View className="bg-surface rounded-3xl p-6 border border-border shadow-sm">
               <Text className="text-sm font-semibold text-muted mb-2">Total Spent</Text>
-              <Text className="text-4xl font-bold text-foreground">
+              <Text 
+                className="text-4xl font-bold text-foreground"
+                adjustsFontSizeToFit={true}
+                numberOfLines={1}
+              >
                 {formatCurrency(totalSpent, settings.currency)}
               </Text>
             </View>
@@ -97,13 +101,23 @@ export default function ReportsScreen() {
             <View className="flex-row gap-3">
               <View className="flex-1 bg-surface rounded-2xl p-4 border border-border shadow-sm">
                 <Text className="text-xs font-semibold text-muted mb-1">Avg Transaction</Text>
-                <Text className="text-xl font-bold text-foreground">
+                <Text 
+                  className="text-xl font-bold text-foreground"
+                  adjustsFontSizeToFit={true}
+                  numberOfLines={1}
+                >
                   {formatCurrency(avgTransaction, settings.currency)}
                 </Text>
               </View>
               <View className="flex-1 bg-surface rounded-2xl p-4 border border-border shadow-sm">
                 <Text className="text-xs font-semibold text-muted mb-1">Transactions</Text>
-                <Text className="text-xl font-bold text-foreground">{monthExpenses.length}</Text>
+                <Text 
+                  className="text-xl font-bold text-foreground"
+                  adjustsFontSizeToFit={true}
+                  numberOfLines={1}
+                >
+                  {monthExpenses.length}
+                </Text>
               </View>
             </View>
           </View>

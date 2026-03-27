@@ -52,7 +52,7 @@ export default function AddExpenseScreen() {
   };
 
   return (
-    <ScreenContainer className="p-0" edges={["left", "right", "bottom"]}>
+    <ScreenContainer className="p-0" edges={["left", "right"]} keyboardAvoiding={true}>
       {/* Header */}
       <View 
         style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 8 : 16) }} 
@@ -166,7 +166,10 @@ export default function AddExpenseScreen() {
       </ScrollView>
 
       {/* Action Buttons */}
-      <View className="px-6 gap-3 mt-6 mb-8">
+      <View 
+        style={{ paddingBottom: insets.bottom || 24 }}
+        className="px-6 gap-3 mt-6"
+      >
         <TouchableOpacity
           onPress={handleAddExpense}
           disabled={loading}
