@@ -1,4 +1,6 @@
-import { ScrollView, Text, View, TouchableOpacity, FlatList } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity, FlatList, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { useRouter } from "expo-router";
 import { useState, useMemo } from "react";
 import { ScreenContainer } from "@/components/screen-container";
@@ -11,6 +13,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const expenseContext = useExpense();
   const themeColors = useColors();
+  const insets = useSafeAreaInsets();
   const now = new Date();
   const [currentMonth, setCurrentMonth] = useState(now.getMonth());
   const [currentYear, setCurrentYear] = useState(now.getFullYear());
@@ -55,9 +58,12 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScreenContainer className="p-0">
+    <ScreenContainer className="p-0" edges={["left", "right"]}>
       {/* Sticky Header with Month Navigation */}
-      <View className="bg-primary px-6 pt-6 pb-4 shadow-sm z-10">
+      <View 
+        style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 4 : 8) }}
+        className="bg-primary px-6 pb-4 shadow-sm z-10"
+      >
         <View className="flex-row items-center justify-between">
           <TouchableOpacity onPress={handlePrevMonth} className="p-2 -ml-2">
             <IconSymbol name="chevron.left" size={28} color="#ffffff" />

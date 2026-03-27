@@ -1,4 +1,6 @@
-import { ScrollView, Text, View, TouchableOpacity, TextInput, Alert, FlatList } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity, TextInput, Alert, FlatList, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import { ScreenContainer } from "@/components/screen-container";
@@ -13,6 +15,7 @@ export default function ManageCategoryScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const themeColors = useColors();
+  const insets = useSafeAreaInsets();
   const { categories, addCategory, updateCategory } = useExpense();
 
   const [name, setName] = useState("");
@@ -53,9 +56,12 @@ export default function ManageCategoryScreen() {
   };
 
   return (
-    <ScreenContainer className="p-0">
+    <ScreenContainer className="p-0" edges={["left", "right", "bottom"]}>
       {/* Header */}
-      <View className="bg-primary px-6 pt-6 pb-6">
+      <View 
+        style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 8 : 16) }}
+        className="bg-primary px-6 pb-6"
+      >
         <View className="flex-row items-center justify-between h-8">
           <TouchableOpacity 
             onPress={() => router.back()} 

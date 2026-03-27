@@ -1,4 +1,6 @@
-import { ScrollView, Text, View, TouchableOpacity, FlatList, TextInput } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity, FlatList, TextInput, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useMemo } from "react";
 import { ScreenContainer } from "@/components/screen-container";
@@ -10,6 +12,7 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 export default function ExpensesScreen() {
   const router = useRouter();
   const themeColors = useColors();
+  const insets = useSafeAreaInsets();
   const { expenses, categories, settings } = useExpense();
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -37,10 +40,13 @@ export default function ExpensesScreen() {
   };
 
   return (
-    <ScreenContainer className="p-0">
+    <ScreenContainer className="p-0" edges={["left", "right"]}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
         {/* Header */}
-        <View className="bg-primary px-6 pt-6 pb-6">
+        <View 
+          style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 8 : 16) }}
+          className="bg-primary px-6 pb-6"
+        >
           <Text className="text-2xl font-bold text-white mb-4">Expenses</Text>
 
           {/* Search Bar */}

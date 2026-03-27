@@ -1,4 +1,6 @@
-import { ScrollView, Text, View, TouchableOpacity, Alert, FlatList } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity, Alert, FlatList, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useExpense } from "@/lib/expense-context";
@@ -8,6 +10,7 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 export default function CategoriesScreen() {
   const router = useRouter();
   const themeColors = useColors();
+  const insets = useSafeAreaInsets();
   const { categories, deleteCategory, expenses } = useExpense();
 
   const handleDeleteCategory = (id: string, name: string) => {
@@ -44,10 +47,13 @@ export default function CategoriesScreen() {
   };
 
   return (
-    <ScreenContainer className="p-0">
+    <ScreenContainer className="p-0" edges={["left", "right", "bottom"]}>
       <View className="flex-1">
         {/* Header */}
-        <View className="bg-primary px-6 pt-6 pb-6">
+        <View 
+          style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 8 : 16) }}
+          className="bg-primary px-6 pb-6"
+        >
           <View className="flex-row items-center justify-between h-8">
             <TouchableOpacity 
               onPress={() => router.back()} 

@@ -1,4 +1,6 @@
-import { ScrollView, Text, View, TouchableOpacity, Alert, Switch } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity, Alert, Switch, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
@@ -12,6 +14,7 @@ import { useThemeContext } from "@/lib/theme-provider";
 export default function SettingsScreen() {
   const router = useRouter();
   const themeColors = useColors();
+  const insets = useSafeAreaInsets();
   const { settings, updateSettings, refreshData } = useExpense();
   const [loading, setLoading] = useState(false);
 
@@ -79,9 +82,12 @@ export default function SettingsScreen() {
   };
 
   return (
-    <ScreenContainer className="p-0">
+    <ScreenContainer className="p-0" edges={["left", "right"]}>
       {/* Header */}
-      <View className="bg-primary px-6 pt-6 pb-6 shadow-sm">
+      <View 
+        style={{ paddingTop: insets.top + (Platform.OS === 'ios' ? 8 : 16) }}
+        className="bg-primary px-6 pb-6 shadow-sm"
+      >
         <Text className="text-2xl font-bold text-white">Settings</Text>
       </View>
 
