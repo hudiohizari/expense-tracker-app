@@ -54,26 +54,27 @@ export default function ManageCategoryScreen() {
 
   return (
     <ScreenContainer className="p-0">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
-        {/* Header */}
-        <View className="bg-primary px-6 pt-6 pb-6">
-          <View className="flex-row items-center justify-between h-8">
-            <TouchableOpacity 
-              onPress={() => router.back()} 
-              className="w-8 h-8 items-start justify-center -ml-1"
-            >
-              <IconSymbol name="chevron.left" size={24} color="#ffffff" />
-            </TouchableOpacity>
-            
-            <View className="flex-1 items-center justify-center">
-              <Text className="text-2xl font-bold text-white text-center">
-                {id ? "Edit Category" : "Add Category"}
-              </Text>
-            </View>
-            
-            <View className="w-8" />
+      {/* Header */}
+      <View className="bg-primary px-6 pt-6 pb-6">
+        <View className="flex-row items-center justify-between h-8">
+          <TouchableOpacity 
+            onPress={() => router.back()} 
+            className="w-8 h-8 items-start justify-center -ml-1"
+          >
+            <IconSymbol name="chevron.left" size={24} color="#ffffff" />
+          </TouchableOpacity>
+          
+          <View className="flex-1 items-center justify-center">
+            <Text className="text-2xl font-bold text-white text-center">
+              {id ? "Edit Category" : "Add Category"}
+            </Text>
           </View>
+          
+          <View className="w-8" />
         </View>
+      </View>
+
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
 
         <View className="p-6 gap-8">
           {/* Preview */}

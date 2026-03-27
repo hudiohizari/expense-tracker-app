@@ -11,8 +11,11 @@ export default function HomeScreen() {
   const router = useRouter();
   const expenseContext = useExpense();
   const themeColors = useColors();
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const now = new Date();
+  const [currentMonth, setCurrentMonth] = useState(now.getMonth());
+  const [currentYear, setCurrentYear] = useState(now.getFullYear());
+  
+  const isCurrentMonth = currentMonth === now.getMonth() && currentYear === now.getFullYear();
 
   const { expenses, categories, settings } = expenseContext;
 
@@ -42,6 +45,7 @@ export default function HomeScreen() {
   };
 
   const handleNextMonth = () => {
+    if (isCurrentMonth) return;
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(currentYear + 1);
@@ -52,40 +56,46 @@ export default function HomeScreen() {
 
   return (
     <ScreenContainer className="p-0">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
-        {/* Header with Month Navigation */}
-        <View className="bg-primary px-6 pt-6 pb-8">
-          <View className="flex-row items-center justify-between mb-6">
-            <TouchableOpacity onPress={handlePrevMonth} className="p-2">
-              <Text className="text-2xl text-white">‹</Text>
+      {/* Sticky Header with Month Navigation */}
+      <View className="bg-primary px-6 pt-6 pb-4 shadow-sm z-10">
+        <View className="flex-row items-center justify-between">
+          <TouchableOpacity onPress={handlePrevMonth} className="p-2 -ml-2">
+            <IconSymbol name="chevron.left" size={28} color="#ffffff" />
+          </TouchableOpacity>
+          <Text className="text-2xl font-bold text-white">
+            {getMonthName(currentMonth)} {currentYear}
+          </Text>
+          {!isCurrentMonth ? (
+            <TouchableOpacity onPress={handleNextMonth} className="p-2 -mr-2">
+              <IconSymbol name="chevron.right" size={28} color="#ffffff" />
             </TouchableOpacity>
-            <Text className="text-2xl font-bold text-white">
-              {getMonthName(currentMonth)} {currentYear}
-            </Text>
-            <TouchableOpacity onPress={handleNextMonth} className="p-2">
-              <Text className="text-2xl text-white">›</Text>
-            </TouchableOpacity>
-          </View>
+          ) : (
+            <View className="w-10" />
+          )}
+        </View>
+      </View>
 
-          {/* Summary Cards */}
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
+        {/* Scrollable Summary Cards */}
+        <View className="px-6 pt-4 pb-2">
           <View className="gap-3">
-            <View className="bg-white/20 rounded-2xl p-4">
-              <Text className="text-sm text-white mb-1">Total Spent</Text>
-              <Text className="text-3xl font-bold text-white">
+            <View className="bg-surface rounded-3xl p-6 border border-border shadow-sm">
+              <Text className="text-sm font-semibold text-muted mb-2">Total Spent</Text>
+              <Text className="text-4xl font-bold text-foreground">
                 {formatCurrency(totalSpent, settings.currency)}
               </Text>
             </View>
 
             <View className="flex-row gap-3">
-              <View className="flex-1 bg-white/20 rounded-2xl p-4">
-                <Text className="text-xs text-white mb-1">Avg Daily</Text>
-                <Text className="text-xl font-bold text-white">
+              <View className="flex-1 bg-surface rounded-2xl p-4 border border-border shadow-sm">
+                <Text className="text-xs font-semibold text-muted mb-1">Avg Daily</Text>
+                <Text className="text-xl font-bold text-foreground">
                   {formatCurrency(avgDaily, settings.currency)}
                 </Text>
               </View>
-              <View className="flex-1 bg-white/20 rounded-2xl p-4">
-                <Text className="text-xs text-white mb-1">Transactions</Text>
-                <Text className="text-xl font-bold text-white">{monthExpenses.length}</Text>
+              <View className="flex-1 bg-surface rounded-2xl p-4 border border-border shadow-sm">
+                <Text className="text-xs font-semibold text-muted mb-1">Transactions</Text>
+                <Text className="text-xl font-bold text-foreground">{monthExpenses.length}</Text>
               </View>
             </View>
           </View>

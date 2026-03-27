@@ -80,11 +80,12 @@ export default function SettingsScreen() {
 
   return (
     <ScreenContainer className="p-0">
+      {/* Header */}
+      <View className="bg-primary px-6 pt-6 pb-6 shadow-sm">
+        <Text className="text-2xl font-bold text-white">Settings</Text>
+      </View>
+
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
-        {/* Header */}
-        <View className="bg-primary px-6 pt-6 pb-6">
-          <Text className="text-2xl font-bold text-white">Settings</Text>
-        </View>
 
         {/* Preferences Section */}
         <View className="px-6 pt-6">

@@ -46,16 +46,29 @@ export default function AddExpenseScreen() {
   };
 
   return (
-    <ScreenContainer className="p-6">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
-        <View className="gap-6">
-          {/* Header */}
-          <View className="flex-row items-center justify-between mb-2">
-            <Text className="text-2xl font-bold text-foreground">Add Expense</Text>
-            <TouchableOpacity onPress={() => router.back()}>
-              <IconSymbol name="chevron.right" size={24} color={themeColors.foreground} />
-            </TouchableOpacity>
+    <ScreenContainer className="p-0">
+      {/* Header */}
+      <View className="bg-background px-6 pt-6 pb-6 border-b border-border shadow-sm">
+        <View className="flex-row items-center justify-between h-8">
+          <TouchableOpacity 
+            onPress={() => router.back()} 
+            className="w-8 h-8 items-start justify-center -ml-1"
+          >
+            <IconSymbol name="chevron.left" size={24} color={themeColors.foreground} />
+          </TouchableOpacity>
+          
+          <View className="flex-1 items-center justify-center">
+            <Text className="text-2xl font-bold text-foreground text-center">
+              Add Expense
+            </Text>
           </View>
+          
+          <View className="w-8" />
+        </View>
+      </View>
+
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1 p-6 pt-4">
+        <View className="gap-6">
 
           {/* Amount Input */}
           <View>
